@@ -1,45 +1,43 @@
-<div class="container">
+<div class="container-fluid bg-light min-vh-100 py-4">
   <!-- 標題區 -->
-  <header class="header">
-    <div class="header-content">
-      <h1 class="title">
-        <span class="title-year">2025R4</span>
-        <span class="title-dept">產品二部</span>
-        <span class="title-event">Team Building</span>
-      </h1>
-      <p class="subtitle">命運輪盤 · 與你相遇</p>
-    </div>
-    <div class="decoration"></div>
+  <header class="text-center mb-4">
+    <h1 class="display-4 fw-bold mb-3 title-main">
+      <span class="title-year">2025R4</span>
+      <span class="mx-2 title-dept">產品二部</span>
+      <p class="title-event">Team Building</p>
+    </h1>
+    <p class="lead subtitle-text">命運輪盤 · 與你相遇</p>
   </header>
 
   <!-- 主要內容區 -->
-  <main class="main-content">
-    <!-- 輸入與抽題區 -->
-    <section class="draw-section">
-      <div class="input-card">
-        <div class="card-body">
-          <div class="input-group">
-            <input
-              id="userName"
-              type="text"
-              [(ngModel)]="inputName"
-              placeholder="輸入你的英文名字"
-              class="input-field"
-              [class.invalid]="inputName.trim() && !isNameValid()"
-              [disabled]="countdown > 0"
-            />
-            <div class="input-hint" *ngIf="inputName.trim() && !isNameValid()">
-              哎呀!這個名字不在參加名單中喔
+  <div class="container">
+    <div class="row g-4">
+      <!-- 左側:輸入與抽題區 -->
+      <div class="col-lg-6">
+        <!-- 輸入卡片 -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <div class="mb-3">
+              <input
+                id="userName"
+                type="text"
+                [(ngModel)]="inputName"
+                placeholder="輸入你的英文名字"
+                class="form-control form-control-lg"
+                [class.is-invalid]="inputName.trim() && !isNameValid()"
+                [disabled]="countdown > 0"
+              />
+              <div class="invalid-feedback d-block" *ngIf="inputName.trim() && !isNameValid()">
+                哎呀!這個名字不在參加名單中喔
+              </div>
             </div>
-          </div>
 
-          <button
-            class="btn-draw"
-            (click)="drawQuestion()"
-            [disabled]="!isNameValid() || isDrawing || countdown > 0"
-          >
-            <span class="btn-icon">🎲</span>
-            <span class="btn-text">
+            <button
+              class="btn btn-primary btn-lg w-100"
+              (click)="drawQuestion()"
+              [disabled]="!isNameValid() || isDrawing || countdown > 0"
+            >
+              <span class="fs-4 me-2">🎲</span>
               {{
                 countdown > 0
                   ? "等待重置中..."
@@ -47,77 +45,58 @@
                   ? "抽牌中..."
                   : "抽牌囉!"
               }}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 題目卡片 -->
-      <div
-        class="question-card"
-        [class.flipping]="isFlipping"
-        [class.show]="showQuestion"
-      >
-        <div class="card-inner">
-          <div class="card-front">
-            <div class="card-icon">❓</div>
+            </button>
           </div>
-          <div class="card-back">
-            <div class="question-content">
-              <h3 *ngIf="drawnName">{{ drawnName }} 抽到的是</h3>
-              <p class="question-text">{{ drawnQuestion }}</p>
-              <div class="countdown-timer" *ngIf="countdown > 0">
-                <span class="countdown-number">{{ countdown }}</span>
-                <span class="countdown-text">秒後即將重新啟動</span>
-              </div>
+        </div>
+
+        <!-- 題目卡片 -->
+        <div class="card shadow question-display" *ngIf="showQuestion">
+          <div class="card-body text-center p-4">
+            <h5 class="question-name mb-3">{{ drawnName }} 抽到的題目</h5>
+            <p class="question-content">{{ drawnQuestion }}</p>
+            <div class="countdown-info" *ngIf="countdown > 0">
+              {{ countdown }} 秒後重新啟動
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- 記錄列表 -->
-    <section class="records-section">
-      <div class="records-card">
-        <div class="records-header">
-          <h2>抽題記錄</h2>
-          <span class="record-count">{{ records.length }} 筆</span>
-        </div>
-        <div class="records-body">
-          <div class="records-list" *ngIf="records.length > 0; else noRecords">
-            <div
-              class="record-item"
-              *ngFor="let record of records.slice().reverse(); let i = index"
-              [style.animation-delay]="i * 0.05 + 's'"
-            >
-              <div class="record-avatar">
-                {{ record.name.charAt(0) }}
-              </div>
-              <div class="record-content">
-                <div class="record-header-info">
-                  <span class="record-name">{{ record.name }}</span>
-                  <span class="record-time">{{
-                    record.timestamp | date : "HH:mm"
-                  }}</span>
+      <!-- 右側:記錄列表 -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">抽題記錄</h5>
+            <span class="badge bg-light text-dark">{{ records.length }} 筆</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;" *ngIf="records.length > 0; else noRecords">
+              <div
+                class="list-group-item list-group-item-action d-flex gap-3"
+                *ngFor="let record of records.slice().reverse()"
+              >
+                <div class="flex-shrink-0">
+                  <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                       style="width: 48px; height: 48px; font-size: 1.25rem; font-weight: 700;">
+                    {{ record.name.charAt(0).toUpperCase() }}
+                  </div>
                 </div>
-                <p class="record-question">{{ record.question }}</p>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start mb-1">
+                    <h6 class="mb-0 fw-bold">{{ record.name }}</h6>
+                    <small class="text-muted">{{ record.timestamp | date : "HH:mm" }}</small>
+                  </div>
+                  <p class="mb-0 text-muted small">{{ record.question }}</p>
+                </div>
               </div>
             </div>
+            <ng-template #noRecords>
+              <div class="text-center py-5 text-muted">
+                <p class="mb-0">還沒有人抽題喔!趕緊來玩吧!</p>
+              </div>
+            </ng-template>
           </div>
-          <ng-template #noRecords>
-            <div class="no-records">
-              <p>趕緊來玩吧!</p>
-            </div>
-          </ng-template>
         </div>
       </div>
-    </section>
-  </main>
-
-  <!-- 背景裝飾 -->
-  <div class="bg-decoration">
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
-    <div class="circle circle-3"></div>
+    </div>
   </div>
 </div>
