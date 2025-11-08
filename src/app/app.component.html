@@ -1,0 +1,126 @@
+<div class="container">
+  <!-- 標題區 -->
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title">
+        <span class="title-year">2025R4</span>
+        <span class="title-dept">產品二部</span>
+        <span class="title-event">Team Building</span>
+      </h1>
+      <p class="subtitle">命運輪盤 · 與你相遇</p>
+    </div>
+    <div class="decoration"></div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="main-content">
+    <!-- 左側：輸入與抽題區 -->
+    <section class="draw-section">
+      <div class="input-card">
+        <div class="card-header">
+          <h2>我準備好了!</h2>
+        </div>
+        <div class="card-body">
+          <div class="input-group">
+            <input
+              id="userName"
+              type="text"
+              [(ngModel)]="inputName"
+              placeholder="輸入你的英文名字"
+              class="input-field"
+              [class.invalid]="inputName.trim() && !isNameValid()"
+              [disabled]="countdown > 0"
+            />
+            <div class="input-hint" *ngIf="inputName.trim() && !isNameValid()">
+              哎呀!這個名字不在參加名單中喔
+            </div>
+          </div>
+
+          <button
+            class="btn-draw"
+            (click)="drawQuestion()"
+            [disabled]="!isNameValid() || isDrawing || countdown > 0"
+          >
+            <span class="btn-icon">🎲</span>
+            <span class="btn-text">
+              {{
+                countdown > 0
+                  ? "等待重置中..."
+                  : isDrawing
+                  ? "抽牌中..."
+                  : "抽牌囉!"
+              }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 題目卡片 -->
+      <div
+        class="question-card"
+        [class.flipping]="isFlipping"
+        [class.show]="showQuestion"
+      >
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="card-icon">❓</div>
+          </div>
+          <div class="card-back">
+            <div class="question-content">
+              <h3>{{ drawnName }} 的挑戰來了</h3>
+              <p class="question-text">{{ drawnQuestion }}</p>
+              <div class="countdown-timer" *ngIf="countdown > 0">
+                <span class="countdown-number">{{ countdown }}</span>
+                <span class="countdown-text">秒後即將重新啟動</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右側：記錄列表 -->
+    <section class="records-section">
+      <div class="records-card">
+        <div class="records-header">
+          <h2>抽題記錄</h2>
+          <span class="record-count">{{ records.length }} 筆</span>
+        </div>
+        <div class="records-body">
+          <div class="records-list" *ngIf="records.length > 0; else noRecords">
+            <div
+              class="record-item"
+              *ngFor="let record of records.slice().reverse(); let i = index"
+              [style.animation-delay]="i * 0.05 + 's'"
+            >
+              <div class="record-avatar">
+                {{ record.name.charAt(0) }}
+              </div>
+              <div class="record-content">
+                <div class="record-header-info">
+                  <span class="record-name">{{ record.name }}</span>
+                  <span class="record-time">{{
+                    record.timestamp | date : "HH:mm"
+                  }}</span>
+                </div>
+                <p class="record-question">{{ record.question }}</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #noRecords>
+            <div class="no-records">
+              <p>趕緊來玩吧!</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 背景裝飾 -->
+  <div class="bg-decoration">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+</div>
