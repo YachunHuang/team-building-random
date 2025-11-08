@@ -14,8 +14,8 @@
     <div class="row g-4">
       <!-- 左側:輸入與抽題區 -->
       <div class="col-lg-6">
-        <!-- 輸入卡片 -->
-        <div class="card shadow-sm mb-4">
+        <!-- 輸入卡片 - 只在沒有顯示題目時出現 -->
+        <div class="card shadow-sm" *ngIf="!showQuestion">
           <div class="card-body">
             <div class="mb-3">
               <input
@@ -33,11 +33,11 @@
             </div>
 
             <button
-              class="btn btn-primary btn-lg w-100"
+              class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
               (click)="drawQuestion()"
               [disabled]="!isNameValid() || isDrawing || countdown > 0"
             >
-              <span class="fs-4 me-2">🎲</span>
+              <span class="material-icons">casino</span>
               {{
                 countdown > 0
                   ? "等待重置中..."
@@ -49,7 +49,7 @@
           </div>
         </div>
 
-        <!-- 題目卡片 -->
+        <!-- 題目卡片 - 只在抽到題目後出現 -->
         <div class="card shadow question-display" *ngIf="showQuestion">
           <div class="card-body text-center p-4">
             <h5 class="question-name mb-3">{{ drawnName }} 抽到的題目</h5>
@@ -66,9 +66,19 @@
         <div class="card shadow-sm">
           <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0">抽題記錄</h5>
-            <span class="badge bg-light text-dark">{{ records.length }} 筆</span>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-light text-dark record-badge">{{ records.length }} 筆</span>
+              <button 
+                class="btn btn-light refresh-btn"
+                (click)="refreshRecords()"
+                [disabled]="isLoadingRecords"
+                title="同步最新記錄"
+              >
+                <span class="material-icons" [class.spinning]="isLoadingRecords">sync</span>
+              </button>
+            </div>
           </div>
-          <div class="card-body p-0">
+          <div class="card-body p-0" [class.loading]="isLoadingRecords">
             <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;" *ngIf="records.length > 0; else noRecords">
               <div
                 class="list-group-item list-group-item-action d-flex gap-3"
@@ -91,6 +101,7 @@
             </div>
             <ng-template #noRecords>
               <div class="text-center py-5 text-muted">
+                <span class="material-icons mb-3" style="font-size: 48px;">emoji_events</span>
                 <p class="mb-0">還沒有人抽題喔!趕緊來玩吧!</p>
               </div>
             </ng-template>

@@ -12,13 +12,6 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  // 允許的名字清單
-  private readonly ALLOWED_NAMES = [
-    'kiwi', 'jeffery', 'jay', 'vi', 'joey', 
-    'ken', 'gina', 'wennie', 'benji', 'rita', 
-    'joy', 'mia', 'savana', 'tina', 'zora'
-  ];
-  
   // 輸入區的變數
   inputName: string = '';
   
@@ -37,21 +30,23 @@ export class AppComponent implements OnInit {
   
   // 記錄列表
   records: QuestionRecord[] = [];
+  isLoadingRecords: boolean = false;
 
-  constructor(private excelService: ExcelService) { }
+  constructor(private excelService: ExcelService) {}
 
   ngOnInit(): void {
     this.loadRecords();
   }
 
   async loadRecords() {
+    this.isLoadingRecords = true;
     try {
       const records = await this.excelService.loadRecords();
       this.records = records || [];
-      console.log('目前記錄數量:', this.records.length);
     } catch (error) {
-      console.error('載入記錄失敗:', error);
       this.records = [];
+    } finally {
+      this.isLoadingRecords = false;
     }
   }
 
@@ -128,6 +123,11 @@ export class AppComponent implements OnInit {
       return false;
     }
     const normalizedName = this.inputName.trim().toLowerCase();
-    return this.ALLOWED_NAMES.includes(normalizedName);
+    return this.excelService.isNameAllowed(normalizedName);
+  }
+
+  // 手動重新整理記錄
+  refreshRecords(): void {
+    this.loadRecords();
   }
 }
