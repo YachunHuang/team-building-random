@@ -14,12 +14,9 @@
 
   <!-- 主要內容區 -->
   <main class="main-content">
-    <!-- 左側：輸入與抽題區 -->
+    <!-- 輸入與抽題區 -->
     <section class="draw-section">
       <div class="input-card">
-        <div class="card-header">
-          <h2>我準備好了!</h2>
-        </div>
         <div class="card-body">
           <div class="input-group">
             <input
@@ -67,7 +64,7 @@
           </div>
           <div class="card-back">
             <div class="question-content">
-              <h3>{{ drawnName }} 的挑戰來了</h3>
+              <h3 *ngIf="drawnName">{{ drawnName }} 抽到的是</h3>
               <p class="question-text">{{ drawnQuestion }}</p>
               <div class="countdown-timer" *ngIf="countdown > 0">
                 <span class="countdown-number">{{ countdown }}</span>
@@ -79,7 +76,7 @@
       </div>
     </section>
 
-    <!-- 右側：記錄列表 -->
+    <!-- 記錄列表 -->
     <section class="records-section">
       <div class="records-card">
         <div class="records-header">
