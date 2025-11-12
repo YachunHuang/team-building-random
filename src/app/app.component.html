@@ -1,113 +1,95 @@
-<div class="container-fluid bg-light min-vh-100 py-4">
-  <!-- 標題區 -->
-  <header class="text-center mb-4">
-    <h1 class="display-4 fw-bold mb-3 title-main">
-      <span class="title-year">2025R4</span>
-      <span class="mx-2 title-dept">產品二部</span>
-      <p class="title-event">Team Building</p>
+
+<div class="container-fluid min-vh-100 py-4" style="background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);">
+  <header class="text-center mb-5 fade-in">
+    <h1 class="display-5 fw-bold mb-2" style="color: #222; text-shadow: 0 2px 16px rgba(0,0,0,0.04);">
+      讓對話變成一面鏡子
     </h1>
-    <p class="lead subtitle-text">命運輪盤 · 與你相遇</p>
+    <p class="lead" style="color: #444; font-size: 1rem;">產品二部 · 2025 Team Building</p>
   </header>
 
-  <!-- 主要內容區 -->
-  <div class="container">
-    <div class="row g-4">
-      <!-- 左側:輸入與抽題區 -->
-      <div class="col-lg-6">
-        <!-- 輸入卡片 - 只在沒有顯示題目時出現 -->
-        <div class="card shadow-sm" *ngIf="!showQuestion">
-          <div class="card-body">
-            <div class="mb-3">
-              <input
-                id="userName"
-                type="text"
-                [(ngModel)]="inputName"
-                placeholder="輸入你的英文名字"
-                class="form-control form-control-lg"
-                [class.is-invalid]="inputName.trim() && !isNameValid()"
-                [disabled]="countdown > 0"
-              />
-              <div class="invalid-feedback d-block" *ngIf="inputName.trim() && !isNameValid()">
-                哎呀!這個名字不在參加名單中喔
-              </div>
-            </div>
+  <div class="container" style="max-width: 600px;">
+    <div class="input-section mb-5 fade-in" *ngIf="!showQuestion">
+      <input
+        id="userName"
+        type="text"
+        [(ngModel)]="inputName"
+        placeholder="請輸入你的英文名字"
+        class="form-control form-control-lg glass-input mb-3"
+        [class.is-invalid]="inputName.trim() && !isNameValid()"
+        [disabled]="countdown > 0"
+      />
+      <div class="invalid-feedback d-block mb-3" *ngIf="inputName.trim() && !isNameValid()" style="color: #b91c1c; background: rgba(255,107,107,0.15); padding: 0.75rem; border-radius: 12px;">
+        ⚠️ 這個名字不在參加名單中喔
+      </div>
 
-            <button
-              class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
-              (click)="drawQuestion()"
-              [disabled]="!isNameValid() || isDrawing || countdown > 0"
-            >
-              <span class="material-icons">casino</span>
-              {{
-                countdown > 0
-                  ? "等待重置中..."
-                  : isDrawing
-                  ? "抽牌中..."
-                  : "抽牌囉!"
-              }}
-            </button>
-          </div>
-        </div>
+      <button
+        class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+        (click)="drawQuestion()"
+        [disabled]="!isNameValid() || isDrawing || countdown > 0"
+        style="height: 64px; font-size: 1.2rem; background: linear-gradient(90deg,#fbbf24 0%,#60a5fa 100%); color:#222; font-weight:700; border:2px solid #fff; box-shadow:0 2px 12px rgba(34,61,47,0.08);"
+      >
+        <span class="material-icons" style="font-size: 2rem; color:#2563eb;">question_answer</span>
+        {{
+          countdown > 0
+            ? "請稍候..."
+            : isDrawing
+            ? "產生題目中..."
+            : "開始對話"
+        }}
+      </button>
+    </div>
 
-        <!-- 題目卡片 - 只在抽到題目後出現 -->
-        <div class="card shadow question-display" *ngIf="showQuestion">
-          <div class="card-body text-center p-4">
-            <h5 class="question-name mb-3">{{ drawnName }} 抽到的題目</h5>
-            <p class="question-content">{{ drawnQuestion }}</p>
-            <div class="countdown-info" *ngIf="countdown > 0">
-              {{ countdown }} 秒後重新啟動
-            </div>
-          </div>
+    <div class="question-display-floating glass-effect text-center p-5 mb-5 fade-in" *ngIf="showQuestion">
+      <div class="mb-3" style="color: #2563eb; font-weight: 700; font-size: 1.1rem;">
+        {{ drawnName }} 的對話題目
+      </div>
+      <p class="question-content mb-3" style="font-size: 1.4rem; font-weight: 600; color: #1a1a1a; line-height: 1.6;">
+        {{ drawnQuestion }}
+      </p>
+      <div class="countdown-info" *ngIf="countdown > 0" style="color: #b91c1c; font-size: 0.95rem;">
+        ⏱️ {{ countdown }} 秒後可再產生新題目
+      </div>
+    </div>
+
+    <div class="records-section fade-in">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0" style="color: #2563eb; font-weight: 700; font-size: 1.15rem;">
+          對話記錄
+        </h5>
+        <div class="d-flex align-items-center gap-2">
+          <button 
+            class="btn btn-sm"
+            (click)="refreshRecords()"
+            [disabled]="isLoadingRecords"
+            title="重新整理"
+            style="background: #e0e7ef; border: none; padding: 0.5rem; border-radius: 12px;"
+          >
+            <span class="material-icons" [class.spinning]="isLoadingRecords" style="color: #2563eb; font-size: 1.5rem;">sync</span>
+          </button>
         </div>
       </div>
 
-      <!-- 右側:記錄列表 -->
-      <div class="col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">抽題記錄</h5>
-            <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-light text-dark record-badge">{{ records.length }} 筆</span>
-              <button 
-                class="btn btn-light refresh-btn"
-                (click)="refreshRecords()"
-                [disabled]="isLoadingRecords"
-                title="同步最新記錄"
-              >
-                <span class="material-icons" [class.spinning]="isLoadingRecords">sync</span>
-              </button>
+      <div class="records-list" *ngIf="records.length > 0; else noRecords">
+        <div
+          class="record-item glass-effect d-flex gap-3 align-items-start mb-3 p-3"
+          *ngFor="let record of records.slice().reverse()"
+        >
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+              <h6 class="mb-0 fw-bold" style="color: #222;">{{ record.name }}</h6>
+              <small style="color: #888; font-size: 0.85rem;">{{ record.timestamp | date : "HH:mm" }}</small>
             </div>
-          </div>
-          <div class="card-body p-0" [class.loading]="isLoadingRecords">
-            <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;" *ngIf="records.length > 0; else noRecords">
-              <div
-                class="list-group-item list-group-item-action d-flex gap-3"
-                *ngFor="let record of records.slice().reverse()"
-              >
-                <div class="flex-shrink-0">
-                  <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
-                       style="width: 48px; height: 48px; font-size: 1.25rem; font-weight: 700;">
-                    {{ record.name.charAt(0).toUpperCase() }}
-                  </div>
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start mb-1">
-                    <h6 class="mb-0 fw-bold">{{ record.name }}</h6>
-                    <small class="text-muted">{{ record.timestamp | date : "HH:mm" }}</small>
-                  </div>
-                  <p class="mb-0 text-muted small">{{ record.question }}</p>
-                </div>
-              </div>
-            </div>
-            <ng-template #noRecords>
-              <div class="text-center py-5 text-muted">
-                <span class="material-icons mb-3" style="font-size: 48px;">emoji_events</span>
-                <p class="mb-0">還沒有人抽題喔!趕緊來玩吧!</p>
-              </div>
-            </ng-template>
+            <p class="mb-0" style="color: #444; font-size: 0.95rem; line-height: 1.5;">{{ record.question }}</p>
           </div>
         </div>
       </div>
+      
+      <ng-template #noRecords>
+        <div class="text-center py-5 glass-effect" style="border-radius: 20px;">
+          <span class="material-icons mb-3" style="font-size: 64px; color: #e0e7ef;">emoji_events</span>
+          <p class="mb-0" style="color: #2563eb; font-size: 1.1rem;">還沒有人分享，就等你來了！</p>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
