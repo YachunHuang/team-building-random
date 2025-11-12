@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   private countdownInterval: any;
   
   // 記錄列表
-  records: QuestionRecord[] = [];
+  records: Array<QuestionRecord> = [];
   isLoadingRecords: boolean = false;
 
   constructor(private excelService: ExcelService) {}
@@ -51,18 +51,18 @@ export class AppComponent implements OnInit {
   }
 
   // 抽題
-  drawQuestion(): void {
+  async drawQuestion(): Promise<void> {
     // 開始翻轉動畫,禁用按鈕
     this.isFlipping = true;
     this.showQuestion = false;
     this.isDrawing = true;
 
     // 模擬抽題過程 (800ms 翻牌動畫)
-    setTimeout(() => {
+    setTimeout(async () => {
       // 將輸入的名字和抽到的題目存到翻牌顯示變數
       this.drawnName = this.inputName;
       // 根據使用者名稱取得對應的題目 (第一次抽破冰層,之後抽認識層+深度層)
-      this.drawnQuestion = this.excelService.getRandomQuestion(this.inputName);
+      this.drawnQuestion = await this.excelService.getRandomQuestion(this.inputName);
       
       // 顯示題目 (保持翻轉狀態,但按鈕可用)
       this.showQuestion = true;

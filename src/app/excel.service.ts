@@ -7,9 +7,9 @@ export interface QuestionRecord {
 }
 
 export interface QuestionCategories {
-  iceBreaking: string[];
-  gettingToKnow: string[];
-  deepConnection: string[];
+  iceBreaking: Array<string>;
+  gettingToKnow: Array<string>;
+  deepConnection: Array<string>;
 }
 
 @Injectable({
@@ -23,10 +23,7 @@ export class ExcelService {
   };
 
   // 允許的名字清單
-  private allowedNames: string[] = [];
-
-  // 記錄每個人是否已經抽過第一次題目
-  private userFirstDrawMap = new Map<string, boolean>();
+  private allowedNames: Array<string> = [];
 
   // Google Apps Script Web App URL (部署後取得)
   private readonly GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI9mksv2aG38TbeGmUwx92L3ECCU2wudWvdwOQxwsuj2Iny0L95nVVBzxhpgjJ6jwI/exec';
@@ -57,14 +54,15 @@ export class ExcelService {
   }
 
   // 根據使用者抽題邏輯取得題目
-  // 第一次抽題:從破冰層抽取
+  // 第一次抽題:從 Google Sheets Records 判斷
   // 之後:從認識層和深度層混合抽取
-  getRandomQuestion(userName: string): string {
-    const isFirstDraw = !this.userFirstDrawMap.get(userName);
+  async getRandomQuestion(userName: string): Promise<string> {
+    // 先查詢 Google Sheets 是否有該使用者紀錄
+    const records = await this.loadRecords();
+    const hasRecord = records.some(r => r.name.toLowerCase() === userName.toLowerCase());
 
-    if (isFirstDraw) {
+    if (!hasRecord) {
       // 第一次抽題:只從破冰層抽
-      this.userFirstDrawMap.set(userName, true);
       return this.getRandomFromArray(this.questionCategories.iceBreaking);
     } else {
       // 之後:從認識層和深度層混合抽取
@@ -77,7 +75,7 @@ export class ExcelService {
   }
 
   // 從陣列中隨機取得一個元素
-  private getRandomFromArray(array: string[]): string {
+  private getRandomFromArray(array: Array<string>): string {
     if (array.length === 0) {
       return '目前沒有可用的題目';
     }
@@ -86,7 +84,7 @@ export class ExcelService {
   }
 
   // 取得允許的名字清單
-  getAllowedNames(): string[] {
+  getAllowedNames(): Array<string> {
     return this.allowedNames;
   }
 
@@ -132,7 +130,7 @@ export class ExcelService {
   }
 
   // 從 Google Sheets 讀取記錄 (使用 JSONP 避開 CORS)
-  async loadRecords(): Promise<QuestionRecord[]> {
+  async loadRecords(): Promise<Array<QuestionRecord>> {
     return new Promise((resolve) => {
       const callbackName = 'googleSheetsCallback_' + Date.now();
       (window as any)[callbackName] = (data: any) => {
