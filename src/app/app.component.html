@@ -1,14 +1,26 @@
 
 <div class="container-fluid min-vh-100 py-4" style="background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);">
   <header class="text-center mb-5 fade-in">
-    <h1 class="display-5 fw-bold mb-2" style="color: #222; text-shadow: 0 2px 16px rgba(0,0,0,0.04);">
+    <p class="mb-2" style="letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.8rem; color: #64748b;">
+      產品二部 · 2025 TEAM BUILDING
+    </p>
+    <h1 class="display-6 fw-bold mb-3" style="color: #0f172a; text-shadow: 0 2px 16px rgba(15,23,42,0.06);">
       讓對話變成一面鏡子
     </h1>
-    <p class="lead" style="color: #444; font-size: 1rem;">產品二部 · 2025 Team Building</p>
+    <p class="lead mb-0" style="color: #4b5563; font-size: 0.98rem; max-width: 640px; margin: 0 auto;">
+      從一個問題開始，看見彼此的視角、假設與選擇，讓團隊的合作更有理解與信任。
+    </p>
   </header>
 
-  <div class="container" style="max-width: 600px;">
-    <div class="input-section mb-5 fade-in" *ngIf="!showQuestion">
+  <div class="container" style="max-width: 720px;">
+    <!-- 今天輪到誰 -->
+    <section class="mb-5 fade-in" *ngIf="!showQuestion">
+      <div class="d-flex align-items-baseline justify-content-between mb-3">
+        <div>
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天輪到誰先開啟一段對話?</h2>
+        </div>
+      </div>
+
       <input
         id="userName"
         type="text"
@@ -19,7 +31,7 @@
         [disabled]="countdown > 0"
       />
       <div class="invalid-feedback d-block mb-3" *ngIf="inputName.trim() && !isNameValid()" style="color: #b91c1c; background: rgba(255,107,107,0.15); padding: 0.75rem; border-radius: 12px;">
-        ⚠️ 這個名字不在參加名單中喔
+        這個名字不在參加名單中喔
       </div>
 
       <button
@@ -37,49 +49,75 @@
             : "開始對話"
         }}
       </button>
-    </div>
+    </section>
 
-    <div class="question-display-floating glass-effect text-center p-5 mb-5 fade-in" *ngIf="showQuestion">
-      <div class="mb-3" style="color: #2563eb; font-weight: 700; font-size: 1.1rem;">
-        {{ drawnName }} 的對話題目
-      </div>
-      <p class="question-content mb-3" style="font-size: 1.4rem; font-weight: 600; color: #1a1a1a; line-height: 1.6;">
-        {{ drawnQuestion }}
-      </p>
-      <div class="countdown-info" *ngIf="countdown > 0" style="color: #b91c1c; font-size: 0.95rem;">
-        ⏱️ {{ countdown }} 秒後可再產生新題目
-      </div>
-    </div>
-
-    <div class="records-section fade-in">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0" style="color: #2563eb; font-weight: 700; font-size: 1.15rem;">
-          對話記錄
-        </h5>
-        <div class="d-flex align-items-center gap-2">
-          <button 
-            class="btn btn-sm"
-            (click)="refreshRecords()"
-            [disabled]="isLoadingRecords"
-            title="重新整理"
-            style="background: #e0e7ef; border: none; padding: 0.5rem; border-radius: 12px;"
-          >
-            <span class="material-icons" [class.spinning]="isLoadingRecords" style="color: #2563eb; font-size: 1.5rem;">sync</span>
-          </button>
+    <!-- 今天的對話起點 -->
+    <section class="mb-5 fade-in" *ngIf="showQuestion">
+      <div class="d-flex align-items-baseline justify-content-between mb-3">
+        <div>
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天的對話起點</h2>
         </div>
       </div>
 
-      <div class="records-list" *ngIf="records.length > 0; else noRecords">
-        <div
-          class="record-item glass-effect d-flex gap-3 align-items-start mb-3 p-3"
-          *ngFor="let record of records.slice().reverse()"
-        >
-          <div class="flex-grow-1">
-            <div class="d-flex justify-content-between align-items-start mb-1">
-              <h6 class="mb-0 fw-bold" style="color: #222;">{{ record.name }}</h6>
-              <small style="color: #888; font-size: 0.85rem;">{{ record.timestamp | date : "HH:mm" }}</small>
+      <div class="question-display-floating glass-effect text-center p-5 fade-in">
+        <div class="mb-2" style="color: #2563eb; font-weight: 700; font-size: 1rem;">
+          {{ drawnName }} 的對話題目
+        </div>
+        <p class="question-content mb-3" style="font-size: 1.35rem; font-weight: 600; color: #111827; line-height: 1.6;">
+          {{ drawnQuestion }}
+        </p>
+        <div class="countdown-info" *ngIf="countdown > 0" style="color: #b91c1c; font-size: 0.95rem;">
+          {{ countdown }} 秒後可再產生新題目
+        </div>
+      </div>
+    </section>
+
+    <!-- 今天對話的足跡 (可收合) -->
+    <section class="records-section fade-in">
+      <button
+        class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+        (click)="showRecordsSection = !showRecordsSection"
+        style="background:#e0e7ef; border-radius:16px; border:none; padding:0.9rem 1.1rem;"
+      >
+        <div class="text-start">
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天的對話紀錄</h2>
+        </div>
+        <span class="material-icons" style="color:#4b5563;">{{ showRecordsSection ? 'expand_less' : 'expand_more' }}</span>
+      </button>
+
+      <div *ngIf="showRecordsSection">
+        <div class="glass-effect p-3" style="border-radius: 16px;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <div style="color:#6b7280; font-size:0.8rem;">
+                今天已經聊了 <strong>{{ totalQuestionsToday || 0 }}</strong> 題 ·
+                <strong>{{ uniqueSpeakersToday || 0 }}</strong> 位分享
+              </div>
             </div>
-            <p class="mb-0" style="color: #444; font-size: 0.95rem; line-height: 1.5;">{{ record.question }}</p>
+            <button 
+              class="btn btn-sm"
+              (click)="refreshRecords()"
+              [disabled]="isLoadingRecords"
+              title="重新整理"
+              style="background: #e0e7ef; border: none; padding: 0.35rem 0.55rem; border-radius: 999px;"
+            >
+              <span class="material-icons" [class.spinning]="isLoadingRecords" style="color: #2563eb; font-size: 1.2rem;">sync</span>
+            </button>
+          </div>
+
+          <div class="records-list" *ngIf="records.length > 0; else noRecords">
+            <div
+              class="record-item glass-effect d-flex gap-3 align-items-start mb-3 p-3"
+              *ngFor="let record of records.slice().reverse()"
+            >
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <h6 class="mb-0 fw-bold" style="color: #222;">{{ record.name }}</h6>
+                  <small style="color: #888; font-size: 0.85rem;">{{ record.timestamp | date : "HH:mm" }}</small>
+                </div>
+                <p class="mb-0" style="color: #444; font-size: 0.95rem; line-height: 1.5;">{{ record.question }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -87,9 +125,156 @@
       <ng-template #noRecords>
         <div class="text-center py-5 glass-effect" style="border-radius: 20px;">
           <span class="material-icons mb-3" style="font-size: 64px; color: #e0e7ef;">emoji_events</span>
-          <p class="mb-0" style="color: #2563eb; font-size: 1.1rem;">還沒有人分享，就等你來了！</p>
+          <p class="mb-1" style="color: #2563eb; font-size: 1.05rem;">今天的第一個對話，就交給你來開場。</p>
+          <p class="mb-0" style="color: #6b7280; font-size: 0.85rem;">輸入名字，抽出一題，說說你看見了什麼。</p>
         </div>
       </ng-template>
-    </div>
+    </section>
+
+    <!-- 活動後小問卷 (可收合) -->
+    <section class="mt-4 fade-in">
+      <button
+        class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+        (click)="(showSurveySection = !showSurveySection)"
+        style="background:#e0e7ef; border-radius:16px; border:none; padding:0.9rem 1.1rem;"
+      >
+        <div class="text-start">
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">活動後問卷</h2>
+        </div>
+        <span class="material-icons" style="color:#4b5563;">{{ showSurveySection ? 'expand_less' : 'expand_more' }}</span>
+      </button>
+
+      <div class="glass-effect p-4" style="border-radius: 20px;" *ngIf="showSurveySection">
+        <div class="mb-3">
+          <label for="surveyName" class="form-label" style="font-size: 0.9rem; color: #374151;">你的英文名字 (必填)</label>
+          <input
+            id="surveyName"
+            type="text"
+            class="form-control glass-input"
+            [(ngModel)]="surveyName"
+            placeholder="請輸入你的英文名字 (需在參加名單中)"
+          />
+          <div
+            class="mt-1"
+            *ngIf="surveyName.trim() && !excelService.isNameAllowed(surveyName.trim().toLowerCase())"
+            style="font-size: 0.8rem; color: #b91c1c;"
+          >
+            這個名字不在參加名單中喔
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <!-- 活動主題滿意度 1-5 Likert (垂直排版,適合手機) -->
+          <div class="mb-3 pb-3" style="border-bottom: 1px dashed rgba(148,163,184,0.6);">
+            <label class="form-label" style="font-size: 0.9rem; color: #374151;">活動主題滿意度</label>
+            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
+              <span>非常滿意</span>
+              <span>非常不滿意</span>
+            </div>
+            <div class="d-flex justify-content-between gap-1">
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                *ngFor="let score of [5,4,3,2,1]"
+                (click)="surveySatisfaction = score"
+                [ngClass]="{'btn-outline-secondary': surveySatisfaction !== score, 'btn-success': surveySatisfaction === score}"
+                style="border-radius: 999px; font-size: 0.8rem; padding: 0.3rem 0;"
+              >
+                {{ score }}
+              </button>
+            </div>
+          </div>
+
+          <!-- 時間掌握滿意度 1-5 Likert (垂直排版,適合手機) -->
+          <div class="pt-2 pb-3" style="border-bottom: 1px dashed rgba(148,163,184,0.6);">
+            <label class="form-label" style="font-size: 0.9rem; color: #374151;">時間掌握滿意度</label>
+            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
+              <span>節奏最剛好</span>
+              <span>太緊湊或太鬆</span>
+            </div>
+            <div class="d-flex justify-content-between gap-1">
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                *ngFor="let score of [5,4,3,2,1]"
+                (click)="surveyTiming = score"
+                [ngClass]="{'btn-outline-secondary': surveyTiming !== score, 'btn-success': surveyTiming === score}"
+                style="border-radius: 999px; font-size: 0.8rem; padding: 0.3rem 0;"
+              >
+                {{ score }}
+              </button>
+            </div>
+          </div>
+
+          <!-- 心理安全感 1-5 Likert -->
+          <div class="pt-3 pb-3" style="border-bottom: 1px dashed rgba(148,163,184,0.6);">
+            <label class="form-label" style="font-size: 0.9rem; color: #374151;">聊的過程，對你來說感覺輕鬆自在嗎?</label>
+            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
+              <span>很放鬆，可以自然分享</span>
+              <span>比較緊繃，不太好開口</span>
+            </div>
+            <div class="d-flex justify-content-between gap-1">
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                *ngFor="let score of [5,4,3,2,1]"
+                (click)="surveyPsychSafety = score"
+                [ngClass]="{'btn-outline-secondary': surveyPsychSafety !== score, 'btn-success': surveyPsychSafety === score}"
+                style="border-radius: 999px; font-size: 0.8rem; padding: 0.3rem 0;"
+              >
+                {{ score }}
+              </button>
+            </div>
+          </div>
+
+          <!-- 自我覺察 1-5 Likert -->
+          <div class="pt-3">
+            <label class="form-label" style="font-size: 0.9rem; color: #374151;">今天的對話，對你看見自己的樣子有沒有幫助?</label>
+            <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
+              <span>很有幫助，像一面鏡子</span>
+              <span>幫助不大</span>
+            </div>
+            <div class="d-flex justify-content-between gap-1">
+              <button
+                type="button"
+                class="btn btn-sm flex-fill"
+                *ngFor="let score of [5,4,3,2,1]"
+                (click)="surveySelfAwareness = score"
+                [ngClass]="{'btn-outline-secondary': surveySelfAwareness !== score, 'btn-success': surveySelfAwareness === score}"
+                style="border-radius: 999px; font-size: 0.8rem; padding: 0.3rem 0;"
+              >
+                {{ score }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="surveySuggestion" class="form-label" style="font-size: 0.9rem; color: #374151;">給這次活動的建議或感想 (選填)</label>
+          <textarea
+            id="surveySuggestion"
+            class="form-control glass-input"
+            rows="3"
+            [(ngModel)]="surveySuggestion"
+            placeholder="例如: 哪個環節最有收穫、哪裡可以調整得更好..."
+          ></textarea>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+          <div *ngIf="surveySubmitted" style="font-size: 0.9rem; color: #059669;">
+            已收到你的問卷，謝謝你花時間回饋，也謝謝這次一起參與對話。
+          </div>
+
+          <button
+            class="btn btn-primary ms-sm-auto"
+            [disabled]="!isSurveyValid || isSubmittingSurvey"
+            (click)="submitSurvey()"
+            style="min-width: 160px; background: linear-gradient(90deg,#34d399 0%,#22c55e 100%); border: none; font-weight: 600;"
+          >
+            {{ isSubmittingSurvey ? '送出中...' : '送出問卷' }}
+          </button>
+        </div>
+      </div>
+    </section>
   </div>
 </div>
