@@ -13,11 +13,11 @@
   </header>
 
   <div class="container" style="max-width: 720px;">
-    <!-- 今天輪到誰 -->
+    <!-- 輪到誰 -->
     <section class="mb-5 fade-in" *ngIf="!showQuestion">
       <div class="d-flex align-items-baseline justify-content-between mb-3">
         <div>
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天輪到誰先開啟一段對話?</h2>
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">輪到誰先開啟一段對話?</h2>
         </div>
       </div>
 
@@ -51,11 +51,11 @@
       </button>
     </section>
 
-    <!-- 今天的對話起點 -->
+    <!-- 對話起點 -->
     <section class="mb-5 fade-in" *ngIf="showQuestion">
       <div class="d-flex align-items-baseline justify-content-between mb-3">
         <div>
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天的對話起點</h2>
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">對話起點</h2>
         </div>
       </div>
 
@@ -72,7 +72,7 @@
       </div>
     </section>
 
-    <!-- 今天對話的足跡 (可收合) -->
+    <!-- 對話的足跡 (可收合) -->
     <section class="records-section fade-in">
       <button
         class="btn w-100 d-flex justify-content-between align-items-center mb-3"
@@ -80,7 +80,7 @@
         style="background:#e0e7ef; border-radius:16px; border:none; padding:0.9rem 1.1rem;"
       >
         <div class="text-start">
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">今天的對話紀錄</h2>
+          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">對話紀錄</h2>
         </div>
         <span class="material-icons" style="color:#4b5563;">{{ showRecordsSection ? 'expand_less' : 'expand_more' }}</span>
       </button>
@@ -90,7 +90,7 @@
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
               <div style="color:#6b7280; font-size:0.8rem;">
-                今天已經聊了 <strong>{{ totalQuestionsToday || 0 }}</strong> 題 ·
+                已經聊了 <strong>{{ totalQuestionsToday || 0 }}</strong> 題 ·
                 <strong>{{ uniqueSpeakersToday || 0 }}</strong> 位分享
               </div>
             </div>
@@ -125,13 +125,13 @@
       <ng-template #noRecords>
         <div class="text-center py-5 glass-effect" style="border-radius: 20px;">
           <span class="material-icons mb-3" style="font-size: 64px; color: #e0e7ef;">emoji_events</span>
-          <p class="mb-1" style="color: #2563eb; font-size: 1.05rem;">今天的第一個對話，就交給你來開場。</p>
+          <p class="mb-1" style="color: #2563eb; font-size: 1.05rem;">第一個對話，就交給你來開場。</p>
           <p class="mb-0" style="color: #6b7280; font-size: 0.85rem;">輸入名字，抽出一題，說說你看見了什麼。</p>
         </div>
       </ng-template>
     </section>
 
-    <!-- 活動後小問卷 (可收合) -->
+    <!-- 問卷 (可收合) -->
     <section class="mt-4 fade-in">
       <button
         class="btn w-100 d-flex justify-content-between align-items-center mb-3"
@@ -146,13 +146,13 @@
 
       <div class="glass-effect p-4" style="border-radius: 20px;" *ngIf="showSurveySection">
         <div class="mb-3">
-          <label for="surveyName" class="form-label" style="font-size: 0.9rem; color: #374151;">你的英文名字 (必填)</label>
+          <label for="surveyName" class="form-label" style="font-size: 0.9rem; color: #374151;">你的英文名字</label>
           <input
             id="surveyName"
             type="text"
             class="form-control glass-input"
             [(ngModel)]="surveyName"
-            placeholder="請輸入你的英文名字 (需在參加名單中)"
+            placeholder="請輸入你的英文名字"
           />
           <div
             class="mt-1"
@@ -164,7 +164,7 @@
         </div>
 
         <div class="mb-3">
-          <!-- 活動主題滿意度 1-5 Likert (垂直排版,適合手機) -->
+          <!-- 活動主題滿意度 -->
           <div class="mb-3 pb-3" style="border-bottom: 1px dashed rgba(148,163,184,0.6);">
             <label class="form-label" style="font-size: 0.9rem; color: #374151;">活動主題滿意度</label>
             <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
@@ -185,7 +185,7 @@
             </div>
           </div>
 
-          <!-- 時間掌握滿意度 1-5 Likert (垂直排版,適合手機) -->
+          <!-- 時間掌握滿意度 -->
           <div class="pt-2 pb-3" style="border-bottom: 1px dashed rgba(148,163,184,0.6);">
             <label class="form-label" style="font-size: 0.9rem; color: #374151;">時間掌握滿意度</label>
             <div class="d-flex align-items-center justify-content-between mb-1" style="font-size: 0.78rem; color:#6b7280;">
