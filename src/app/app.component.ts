@@ -32,19 +32,8 @@ export class AppComponent implements OnInit {
   records: Array<QuestionRecord> = [];
   isLoadingRecords: boolean = false;
 
-  // 活動後問卷欄位
-  surveyName: string = '';
-  surveySatisfaction: number | null = null; // 活動主題滿意度 1-5
-  surveyTiming: number | null = null;       // 時間掌握滿意度 1-5
-  surveyPsychSafety: number | null = null;  // 心理安全感提升程度 1-5
-  surveySelfAwareness: number | null = null; // 自我覺察提升程度 1-5
-  surveySuggestion: string = '';
-  isSubmittingSurvey: boolean = false;
-  surveySubmitted: boolean = false;
-
   // UI 收合狀態
   showRecordsSection: boolean = false;
-  showSurveySection: boolean = false;
 
   constructor(public excelService: ExcelService) {}
 
@@ -163,50 +152,5 @@ export class AppComponent implements OnInit {
     }
     const count = this.records.filter(r => (r.name || '').toLowerCase() === normalized).length;
     return count >= 2;
-  }
-
-  // 活動後問卷是否可送出
-  get isSurveyValid(): boolean {
-    const name = this.surveyName.trim();
-    const nameValid = !!name && this.excelService.isNameAllowed(name.toLowerCase()) && this.hasAtLeastTwoRecordsForName(name);
-    const satisfactionValid = this.surveySatisfaction !== null && this.surveySatisfaction >= 1 && this.surveySatisfaction <= 5;
-    const timingValid = this.surveyTiming !== null && this.surveyTiming >= 1 && this.surveyTiming <= 5;
-    const psychSafetyValid = this.surveyPsychSafety !== null && this.surveyPsychSafety >= 1 && this.surveyPsychSafety <= 5;
-    const selfAwarenessValid = this.surveySelfAwareness !== null && this.surveySelfAwareness >= 1 && this.surveySelfAwareness <= 5;
-    return nameValid && satisfactionValid && timingValid && psychSafetyValid && selfAwarenessValid;
-  }
-
-  // 送出活動後問卷
-  async submitSurvey(): Promise<void> {
-    if (!this.isSurveyValid || this.isSubmittingSurvey) {
-      return;
-    }
-
-    this.isSubmittingSurvey = true;
-    this.surveySubmitted = false;
-
-    try {
-      await this.excelService.submitSurvey({
-        name: this.surveyName.trim(),
-        satisfaction: this.surveySatisfaction!,
-        timing: this.surveyTiming!,
-        psychSafety: this.surveyPsychSafety!,
-        selfAwareness: this.surveySelfAwareness!,
-        suggestion: this.surveySuggestion.trim(),
-      });
-
-      this.surveySubmitted = true;
-      // 清空整個表單
-      this.surveyName = '';
-      this.surveySatisfaction = null;
-      this.surveyTiming = null;
-      this.surveyPsychSafety = null;
-      this.surveySelfAwareness = null;
-      this.surveySuggestion = '';
-    } catch (error) {
-      // 若需要可以在這裡加上錯誤提示
-    } finally {
-      this.isSubmittingSurvey = false;
-    }
   }
 }

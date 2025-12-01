@@ -129,44 +129,6 @@ export class ExcelService {
     });
   }
 
-  // 問卷
-  async submitSurvey(payload: {
-    name: string;
-    satisfaction: number; // 活動主題滿意度 (1-5)
-    timing: number;       // 時間掌握滿意度 (1-5)
-    psychSafety: number;  // 心理安全感提升程度 (1-5)
-    selfAwareness: number; // 自我覺察提升程度 (1-5)
-    suggestion?: string;  // 開放式建議,可選填
-  }): Promise<void> {
-    const timestamp = new Date().toLocaleString('zh-TW', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-
-    await fetch(this.GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'submitSurvey',
-        name: payload.name,
-        satisfaction: payload.satisfaction,
-        timing: payload.timing,
-        psychSafety: payload.psychSafety,
-        selfAwareness: payload.selfAwareness,
-        suggestion: payload.suggestion || '',
-        timestamp,
-      })
-    });
-  }
-
   // 從 Google Sheets 讀取記錄 (使用 JSONP 避開 CORS)
   async loadRecords(): Promise<Array<QuestionRecord>> {
     return new Promise((resolve) => {
