@@ -1,134 +1,160 @@
+<!-- 🌌 科技感背景 -->
+<div class="cyber-bg"></div>
 
-<div class="container-fluid min-vh-100 py-4" style="background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);">
-  <header class="text-center mb-5 fade-in">
-    <p class="mb-2" style="letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.8rem; color: #64748b;">
-      產品二部 · 2025 TEAM BUILDING
-    </p>
-    <h1 class="display-6 fw-bold mb-3" style="color: #0f172a; text-shadow: 0 2px 16px rgba(15,23,42,0.06);">
+<div class="container-fluid min-vh-100 py-4">
+  <header class="text-center mb-5 fade-in-up">
+    <div class="cyber-subtitle mb-3">
+      ⟨ 產品二部 · 2025 TEAM BUILDING ⟩
+    </div>
+    <h1 class="cyber-title mb-4">
       讓對話變成一面鏡子
     </h1>
-    <p class="lead mb-0" style="color: #4b5563; font-size: 0.98rem; max-width: 640px; margin: 0 auto;">
-      從一個問題開始，看見彼此的視角、假設與選擇，讓團隊的合作更有理解與信任。
+    <p class="mx-auto" style="color: var(--text-secondary); max-width: 600px; font-size: 0.95rem; line-height: 1.8;">
+      從一個問題開始，看見彼此的視角、假設與選擇<br>
+      讓團隊的合作更有理解與信任
     </p>
   </header>
 
-  <div class="container" style="max-width: 720px;">
-    <!-- 輪到誰 -->
-    <section class="mb-5 fade-in" *ngIf="!showQuestion">
-      <div class="d-flex align-items-baseline justify-content-between mb-3">
-        <div>
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">輪到誰先開啟一段對話?</h2>
+  <div class="container" style="max-width: 800px;">
+    
+    <!-- 🎮 輸入區塊 -->
+    <section class="mb-5 fade-in-up" style="animation-delay: 0.1s" *ngIf="!showQuestion">
+      <div class="glass-card p-4 p-md-5">
+        <!-- 區塊標題 -->
+        <div class="section-header">
+          <span class="section-title">// 開始對話</span>
+          <div class="section-line"></div>
         </div>
-      </div>
 
-      <input
-        id="userName"
-        type="text"
-        [(ngModel)]="inputName"
-        placeholder="請輸入你的英文名字"
-        class="form-control form-control-lg glass-input mb-3"
-        [class.is-invalid]="inputName.trim() && !isNameValid()"
-        [disabled]="countdown > 0"
-      />
-      <div class="invalid-feedback d-block mb-3" *ngIf="inputName.trim() && !isNameValid()" style="color: #b91c1c; background: rgba(255,107,107,0.15); padding: 0.75rem; border-radius: 12px;">
-        這個名字不在參加名單中喔
-      </div>
+        <!-- 輸入框 -->
+        <div class="mb-4">
+          <input
+            id="userName"
+            type="text"
+            [(ngModel)]="inputName"
+            placeholder="輸入你的英文名字"
+            class="input-neon"
+            [class.is-invalid]="inputName.trim() && !isNameValid()"
+            [disabled]="countdown > 0"
+          />
+        </div>
 
-      <button
-        class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
-        (click)="drawQuestion()"
-        [disabled]="!isNameValid() || isDrawing || countdown > 0"
-        style="height: 64px; font-size: 1.2rem; background: linear-gradient(90deg,#fbbf24 0%,#60a5fa 100%); color:#222; font-weight:700; border:2px solid #fff; box-shadow:0 2px 12px rgba(34,61,47,0.08);"
-      >
-        <span class="material-icons" style="font-size: 2rem; color:#2563eb;">question_answer</span>
-        {{
-          countdown > 0
-            ? "請稍候..."
-            : isDrawing
-            ? "產生題目中..."
-            : "開始對話"
-        }}
-      </button>
+        <!-- 錯誤提示 -->
+        <div class="error-message mb-4" *ngIf="inputName.trim() && !isNameValid()">
+          <span class="material-icons me-2" style="font-size: 1.1rem;">error_outline</span>
+          這個名字不在參加名單中喔
+        </div>
+
+        <!-- 開始按鈕 -->
+        <button
+          class="btn-neon w-100 d-flex align-items-center justify-content-center gap-3"
+          (click)="drawQuestion()"
+          [disabled]="!isNameValid() || isDrawing || countdown > 0"
+        >
+          <span class="material-icons" style="font-size: 1.8rem;">
+            {{ isDrawing ? 'hourglass_top' : 'rocket_launch' }}
+          </span>
+          <span>
+            {{ countdown > 0 ? 'COOLDOWN...' : isDrawing ? 'GENERATING...' : 'LAUNCH DIALOGUE' }}
+          </span>
+        </button>
+      </div>
     </section>
 
-    <!-- 對話起點 -->
-    <section class="mb-5 fade-in" *ngIf="showQuestion">
-      <div class="d-flex align-items-baseline justify-content-between mb-3">
-        <div>
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">對話起點</h2>
+    <!-- 🎪 問題展示區 -->
+    <section class="mb-5 fade-in-up" *ngIf="showQuestion">
+      <div class="question-card glass-card">
+        <div class="question-name">
+          ◈ {{ drawnName }}'s QUESTION ◈
         </div>
-      </div>
-
-      <div class="question-display-floating glass-effect text-center p-5 fade-in">
-        <div class="mb-2" style="color: #2563eb; font-weight: 700; font-size: 1rem;">
-          {{ drawnName }} 的對話題目
-        </div>
-        <p class="question-content mb-3" style="font-size: 1.35rem; font-weight: 600; color: #111827; line-height: 1.6;">
-          {{ drawnQuestion }}
+        <p class="question-text position-relative" style="z-index: 1;">
+          {{ animatedQuestion || drawnQuestion }}
         </p>
-        <div class="countdown-info" *ngIf="countdown > 0" style="color: #b91c1c; font-size: 0.95rem;">
-          {{ countdown }} 秒後可再產生新題目
+        <div class="countdown-badge" *ngIf="countdown > 0">
+          <span class="material-icons" style="font-size: 1rem;">timer</span>
+          {{ countdown }}s UNTIL NEXT
         </div>
+      </div>
+
+      <!-- 再抽一次按鈕 -->
+      <div class="text-center mt-4">
+        <button
+          class="btn-ghost d-inline-flex align-items-center gap-2"
+          (click)="showQuestion = false; inputName = ''"
+        >
+          <span class="material-icons">replay</span>
+          換人對話
+        </button>
       </div>
     </section>
 
-    <!-- 對話的足跡 (可收合) -->
-    <section class="records-section fade-in">
-      <button
-        class="btn w-100 d-flex justify-content-between align-items-center mb-3"
-        (click)="showRecordsSection = !showRecordsSection"
-        style="background:#e0e7ef; border-radius:16px; border:none; padding:0.9rem 1.1rem;"
-      >
-        <div class="text-start">
-          <h2 class="h6 mb-1" style="color: #111827; font-weight: 700;">對話紀錄</h2>
-        </div>
-        <span class="material-icons" style="color:#4b5563;">{{ showRecordsSection ? 'expand_less' : 'expand_more' }}</span>
-      </button>
+    <!-- 📊 對話紀錄區 -->
+    <section class="fade-in-up" style="animation-delay: 0.2s">
+      <div class="glass-card p-4">
+        <!-- 可收合標題 -->
+        <button
+          class="btn-ghost w-100 d-flex justify-content-between align-items-center mb-0"
+          (click)="showRecordsSection = !showRecordsSection"
+          style="border: none; background: transparent; padding: 0;"
+        >
+          <div class="section-header mb-0" style="flex: 1;">
+            <span class="section-title">// 對話紀錄</span>
+            <div class="section-line"></div>
+          </div>
+          <span class="material-icons text-neon-cyan" style="font-size: 1.5rem;">
+            {{ showRecordsSection ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+          </span>
+        </button>
 
-      <div *ngIf="showRecordsSection">
-        <div class="glass-effect p-3" style="border-radius: 16px;">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <div style="color:#6b7280; font-size:0.8rem;">
-                已經聊了 <strong>{{ totalQuestionsToday || 0 }}</strong> 題 ·
-                <strong>{{ uniqueSpeakersToday || 0 }}</strong> 位分享
+        <!-- 展開內容 -->
+        <div *ngIf="showRecordsSection" class="mt-4">
+          <!-- 統計數據 -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="stats-bar">
+              <div class="stat-item">
+                <span class="stat-value">{{ totalQuestionsToday || 0 }}</span>
+                <span class="stat-label">TOPICS</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">{{ uniqueSpeakersToday || 0 }}</span>
+                <span class="stat-label">SPEAKERS</span>
               </div>
             </div>
             <button 
-              class="btn btn-sm"
+              class="btn-icon"
               (click)="refreshRecords()"
               [disabled]="isLoadingRecords"
               title="重新整理"
-              style="background: #e0e7ef; border: none; padding: 0.35rem 0.55rem; border-radius: 999px;"
             >
-              <span class="material-icons" [class.spinning]="isLoadingRecords" style="color: #2563eb; font-size: 1.2rem;">sync</span>
+              <span class="material-icons" [class.spinning]="isLoadingRecords">sync</span>
             </button>
           </div>
 
-          <div class="records-list" *ngIf="records.length > 0; else noRecords">
+          <!-- 記錄列表 -->
+          <div class="records-list stagger" *ngIf="records.length > 0; else noRecords">
             <div
-              class="record-item glass-effect d-flex gap-3 align-items-start mb-3 p-3"
-              *ngFor="let record of records.slice().reverse()"
+              class="record-item"
+              *ngFor="let record of records.slice().reverse(); let i = index"
             >
-              <div class="flex-grow-1">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                  <h6 class="mb-0 fw-bold" style="color: #222;">{{ record.name }}</h6>
-                  <small style="color: #888; font-size: 0.85rem;">{{ record.timestamp | date : "HH:mm" }}</small>
-                </div>
-                <p class="mb-0" style="color: #444; font-size: 0.95rem; line-height: 1.5;">{{ record.question }}</p>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="record-name">{{ record.name }}</span>
+                <span class="record-time">{{ record.timestamp | date:'HH:mm' }}</span>
               </div>
+              <p class="record-question mb-0">{{ record.question }}</p>
             </div>
           </div>
+
+          <!-- 空狀態 -->
+          <ng-template #noRecords>
+            <div class="empty-state">
+              <span class="material-icons empty-icon">emoji_events</span>
+              <p class="empty-title">第一個對話，就交給你來開場</p>
+              <p class="empty-desc">輸入名字，抽出一題，說說你看見了什麼</p>
+            </div>
+          </ng-template>
         </div>
       </div>
-      
-      <ng-template #noRecords>
-        <div class="text-center py-5 glass-effect" style="border-radius: 20px;">
-          <span class="material-icons mb-3" style="font-size: 64px; color: #e0e7ef;">emoji_events</span>
-          <p class="mb-1" style="color: #2563eb; font-size: 1.05rem;">第一個對話，就交給你來開場。</p>
-          <p class="mb-0" style="color: #6b7280; font-size: 0.85rem;">輸入名字，抽出一題，說說你看見了什麼。</p>
-        </div>
-      </ng-template>
     </section>
+
   </div>
 </div>

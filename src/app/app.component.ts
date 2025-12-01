@@ -18,9 +18,11 @@ export class AppComponent implements OnInit {
   // 翻牌顯示的變數 (抽到題目的人)
   drawnName: string = '';
   drawnQuestion: string = '';
+  animatedQuestion: string = '';  // 文字解碼動畫用
   
   // 動畫控制
   isFlipping: boolean = false;  // 控制翻牌動畫
+  private decodeInterval: any;  // 解碼動畫計時器
   showQuestion: boolean = false;  // 控制題目顯示
   isDrawing: boolean = false;  // 控制按鈕 disabled 狀態
   
@@ -72,6 +74,9 @@ export class AppComponent implements OnInit {
       this.isDrawing = false;  // 恢復按鈕
       // isFlipping 保持 true,讓卡片繼續顯示背面
       
+      // 啟動文字解碼動畫
+      this.startDecodeAnimation(this.drawnQuestion);
+      
       // 清空輸入欄位,準備下一位使用者
       this.inputName = '';
       
@@ -110,14 +115,55 @@ export class AppComponent implements OnInit {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
+    // 清除解碼動畫計時器
+    if (this.decodeInterval) {
+      clearInterval(this.decodeInterval);
+    }
     
     this.inputName = '';
     this.drawnName = '';
     this.drawnQuestion = '';
+    this.animatedQuestion = '';
     this.showQuestion = false;
     this.isFlipping = false;
     this.isDrawing = false;
     this.countdown = 0;
+  }
+
+  // 字解碼動畫 - 從亂碼逐漸變成正確文字
+  startDecodeAnimation(finalText: string): void {
+    // 清除之前的動畫
+    if (this.decodeInterval) {
+      clearInterval(this.decodeInterval);
+    }
+
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`01アイウエオカキクケコ';
+    const duration = 1500; // 總動畫時間 1.5 秒
+    const fps = 30;
+    const totalFrames = (duration / 1000) * fps;
+    let frame = 0;
+
+    // 初始化為全部亂碼
+    this.animatedQuestion = finalText.split('').map(char => 
+      char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
+    ).join('');
+
+    this.decodeInterval = setInterval(() => {
+      frame++;
+      const progress = frame / totalFrames;
+      const revealedCount = Math.floor(progress * finalText.length);
+
+      this.animatedQuestion = finalText.split('').map((char, i) => {
+        if (char === ' ') return ' ';
+        if (i < revealedCount) return char;
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join('');
+
+      if (frame >= totalFrames) {
+        clearInterval(this.decodeInterval);
+        this.animatedQuestion = finalText;
+      }
+    }, 1000 / fps);
   }
 
   // 檢查輸入的名字是否有效

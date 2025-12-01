@@ -1,306 +1,17 @@
-// Bootstrap 已在 angular.json 中引入
-// 使用莫蘭迪色系覆蓋 Bootstrap 預設顏色
+// 霓虹色系變數
+$neon-cyan: #00f5ff;
+$neon-purple: #a855f7;
+$neon-pink: #ec4899;
+$neon-green: #10b981;
 
-// 莫蘭迪色系定義
-$morandi-sage: #8B9A8F;        // 莫蘭迪鼠尾草綠
-$morandi-blue: #A3B5C5;        // 莫蘭迪藍
-$morandi-pink: #C8B5B0;        // 莫蘭迪粉
-$morandi-gray: #B0B5B3;        // 莫蘭迪灰
-$morandi-beige: #D4CFC9;       // 莫蘭迪米
-$morandi-lavender: #B5B5C8;    // 莫蘭迪薰衣草
-$brand-color: #FF6128;         // 產品主色
+// 動畫曲線
+$ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 
-// 覆蓋 Bootstrap 主題色
-.bg-primary {
-  background-color: $morandi-sage !important;
-}
-
-.bg-success {
-  background-color: $morandi-blue !important;
-}
-
-.bg-info {
-  background-color: $morandi-pink !important;
-}
-
-.bg-light {
-  background-color: #F5F3F0 !important;
-}
-
-.btn-primary {
-  background-color: $morandi-sage;
-  border-color: $morandi-sage;
-  
-  &:hover:not(:disabled) {
-    background-color: darken($morandi-sage, 8%);
-    border-color: darken($morandi-sage, 8%);
-  }
-  
-  &:disabled {
-    background-color: $morandi-gray;
-    border-color: $morandi-gray;
-    opacity: 0.7;
-  }
-}
-
-.rounded-circle.bg-primary {
-  background-color: $morandi-lavender !important;
-}
-
-.alert-success {
-  background-color: rgba($morandi-blue, 0.15);
-  border-color: $morandi-blue;
-  color: darken($morandi-sage, 25%);
-}
-
-.list-group-item-action:hover {
-  background-color: rgba($morandi-beige, 0.3);
-}
-
-// 平滑過渡
-* {
-  transition: all 0.3s ease;
-}
-
-.title-main {
-  letter-spacing: 1px;
-  
-  .title-year, .title-dept, .title-event {
-    color: $morandi-sage;
-  }color: $morandi-sage;
-}
-
-.subtitle-text {
-  color: darken($morandi-gray, 15%);
-  font-weight: 400;
-  letter-spacing: 2px;
-}
-
-// 題目卡片翻轉動畫 (保留原有效果)
-.question-card {
-  perspective: 1000px;
-  height: 300px;
-  margin-bottom: 1rem;
-
-  &.flipping .card-inner {
-    transform: rotateY(180deg);
-  }
-}
-
-.card-inner {
+// ===== 掃描線效果 =====
+.scan-line {
   position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-.card-front,
-.card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-front {
-  background: linear-gradient(135deg, $morandi-sage 0%, $morandi-gray 100%);
-  color: white;
-
-  .card-icon {
-    font-size: 4rem;
-    animation: bounce 2s ease-in-out infinite;
-  }
-}
-
-.card-back {
-  background: #FAFAF8;
-  transform: rotateY(180deg);
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-// 平滑進入動畫
-.card, .list-group-item {
-  animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// 莫蘭迪風格卡片
-.card {
-  border: none;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  
-  &.shadow-sm {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-  
-  &.shadow {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.card-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-// 表單控制項莫蘭迪風格
-.form-control {
-  border: 2px solid $morandi-beige;
-  background-color: #FAFAF8;
-  
-  &:focus {
-    border-color: $morandi-sage;
-    box-shadow: 0 0 0 0.2rem rgba($morandi-sage, 0.15);
-    background-color: white;
-  }
-  
-  &.is-invalid {
-    border-color: $morandi-pink;
-  }
-}
-
-// 列表群組柔和樣式
-.list-group-item {
-  border: 1px solid rgba($morandi-beige, 0.5);
-  background-color: #FAFAF8;
-}
-
-// 徽章柔和樣式
-.badge.bg-light {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  color: darken($morandi-gray, 20%);
-}
-
-// 題目顯示區 - 簡潔樣式
-.question-display {
-  background: linear-gradient(135deg, #FAFAF8 0%, #F5F3F0 100%);
-  border: 2px solid $morandi-beige;
-  
-  .question-name {
-    color: $morandi-sage;
-    font-weight: 600;
-    font-size: 1.1rem;
-  }
-  
-  .question-content {
-    color: #2C2C2C;
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.8;
-    margin: 1.5rem 0;
-    padding: 0;
-  }
-  
-  .countdown-info {
-    color: $morandi-gray;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-    opacity: 0.7;
-  }
-}
-
-// 記錄筆數徽章
-.record-badge {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-}
-
-// 重新整理按鈕
-.refresh-btn {
-  padding: 0.375rem 0.5rem;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: darken($morandi-gray, 20%);
-  transition: all 0.2s ease;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  
-  .material-icons {
-    font-size: 18px;
-    transition: transform 0.3s ease;
-    line-height: 1;
-  }
-  
-  &:hover:not(:disabled) {
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
-    .material-icons {
-      transform: rotate(180deg);
-    }
-  }
-  
-  &:active:not(:disabled) {
-    .material-icons {
-      transform: rotate(180deg) scale(0.95);
-    }
-  }
-  
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: rgba(255, 255, 255, 0.7);
-  }
-}
-
-// Material Icons 全域樣式
-.material-icons {
-  vertical-align: middle;
-  user-select: none;
-  
-  &.spinning {
-    animation: spin 1s linear infinite;
-  }
-}
-
-// 旋轉動畫
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-// 載入中的列表效果
-.card-body.loading {
-  position: relative;
-  opacity: 0.6;
-  pointer-events: none;
+  overflow: hidden;
   
   &::after {
     content: '';
@@ -308,22 +19,297 @@ $brand-color: #FF6128;         // 產品主色
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba($morandi-beige, 0.3) 50%,
-      transparent 100%
-    );
-    animation: shimmer 1.5s infinite;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, $neon-cyan, transparent);
+    animation: scanLine 3s linear infinite;
   }
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
+@keyframes scanLine {
+  0% { top: 0; opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { top: 100%; opacity: 1; }
+}
+
+// ===== 全息投影效果 =====
+.hologram {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(45deg, 
+      transparent 30%, 
+      rgba($neon-cyan, 0.1) 50%, 
+      transparent 70%);
+    background-size: 200% 200%;
+    animation: hologramShift 3s ease infinite;
+    pointer-events: none;
   }
 }
+
+@keyframes hologramShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+// ===== 數據流動畫 =====
+.data-stream {
+  position: fixed;
+  top: 0;
+  right: 10%;
+  width: 1px;
+  height: 100vh;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    $neon-cyan 20%, 
+    transparent 40%, 
+    $neon-purple 60%, 
+    transparent 80%);
+  opacity: 0.3;
+  animation: dataFlow 8s linear infinite;
+}
+
+@keyframes dataFlow {
+  0% { background-position: 0 -100vh; }
+  100% { background-position: 0 100vh; }
+}
+
+// ===== 輸入框科技效果 =====
+.input-neon {
+  position: relative;
+  
+  &::placeholder {
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 0.1em;
+  }
+}
+
+// ===== 問題卡片增強 =====
+.question-card {
+  position: relative;
+  
+  // 角落裝飾
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-top: 2px solid $neon-cyan;
+    border-right: 2px solid $neon-cyan;
+    opacity: 0.5;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    border-bottom: 2px solid $neon-purple;
+    border-left: 2px solid $neon-purple;
+    opacity: 0.5;
+  }
+}
+
+// ===== 記錄項目增強 =====
+.record-item {
+  position: relative;
+  
+  // 序號指示
+  &::after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: $neon-cyan;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+    animation: dotPulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba($neon-cyan, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba($neon-cyan, 0); }
+}
+
+// ===== 統計數字動畫 =====
+.stat-value {
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, $neon-cyan, $neon-purple);
+    transform: scaleX(0);
+    transition: transform 0.3s $ease-out-expo;
+  }
+  
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+// ===== 打字機效果 =====
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid $neon-cyan;
+  white-space: nowrap;
+  animation: 
+    typing 3s steps(40, end),
+    blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+// ===== 故障效果 =====
+.glitch {
+  position: relative;
+  
+  &:hover {
+    animation: glitchEffect 0.3s ease-in-out;
+  }
+}
+
+@keyframes glitchEffect {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+// ===== 載入效果 =====
+.loading-hex {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-top-color: $neon-cyan;
+    border-radius: 50%;
+    animation: hexSpin 1.5s linear infinite;
+  }
+  
+  &::after {
+    border-top-color: $neon-purple;
+    animation-delay: 0.2s;
+    animation-direction: reverse;
+  }
+}
+
+@keyframes hexSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// ===== 脈衝按鈕 =====
+.btn-neon {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, $neon-cyan, $neon-purple);
+    opacity: 0;
+    z-index: -1;
+    filter: blur(15px);
+    transition: opacity 0.3s;
+  }
+  
+  &:hover::after {
+    opacity: 0.5;
+    animation: pulseGlow 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+// ===== Material Icons 科技風 =====
+.material-icons {
+  vertical-align: middle;
+  user-select: none;
+  transition: all 0.3s $ease-spring;
+  
+  &.spinning {
+    animation: spin 1s linear infinite;
+  }
+  
+  &:hover {
+    filter: drop-shadow(0 0 8px $neon-cyan);
+  }
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+// ===== 響應式調整 =====
+@media (max-width: 768px) {
+  .stats-bar {
+    gap: 1rem !important;
+  }
+  
+  .question-card {
+    padding: 2rem 1.5rem !important;
+  }
+  
+  .question-text {
+    font-size: 1.2rem !important;
+  }
+}
+
+// ===== 隱藏滾動條但保留功能 =====
+.records-list {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba($neon-cyan, 0.3) transparent;
+  
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, $neon-cyan, $neon-purple);
+    border-radius: 2px;
+  }
+}
+
