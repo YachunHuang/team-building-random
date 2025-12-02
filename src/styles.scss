@@ -351,29 +351,6 @@ body {
   overflow: hidden;
 }
 
-/* 左側霓虹線 */
-.record-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
-  transform: scaleY(0);
-  transition: transform var(--duration-normal) var(--ease-spring);
-}
-
-.record-item:hover {
-  background: rgba(0, 245, 255, 0.03);
-  border-color: rgba(0, 245, 255, 0.15);
-  transform: translateX(12px);
-}
-
-.record-item:hover::before {
-  transform: scaleY(1);
-}
-
 .record-name {
   font-family: 'Orbitron', monospace;
   font-size: 0.85rem;

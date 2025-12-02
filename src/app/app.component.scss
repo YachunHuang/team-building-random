@@ -116,31 +116,6 @@ $ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
   }
 }
 
-// ===== 記錄項目增強 =====
-.record-item {
-  position: relative;
-  
-  // 序號指示
-  &::after {
-    content: '';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background: $neon-cyan;
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  &:hover::after {
-    opacity: 1;
-    animation: dotPulse 1s ease-in-out infinite;
-  }
-}
-
 @keyframes dotPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba($neon-cyan, 0.7); }
   50% { box-shadow: 0 0 0 10px rgba($neon-cyan, 0); }
